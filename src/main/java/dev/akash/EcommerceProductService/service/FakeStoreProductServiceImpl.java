@@ -1,14 +1,16 @@
 package dev.akash.EcommerceProductService.service;
 
-import dev.akash.EcommerceProductService.cllient.FakeStoreClient;
+import dev.akash.EcommerceProductService.client.FakeStoreClient;
 import dev.akash.EcommerceProductService.dto.FakeStoreResponseDTO;
 import dev.akash.EcommerceProductService.entity.Product;
+import dev.akash.EcommerceProductService.exception.NoProductFoundException;
+import dev.akash.EcommerceProductService.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service("fakestore")
 public class FakeStoreProductServiceImpl implements ProductService{
 
     @Autowired
@@ -16,13 +18,22 @@ public class FakeStoreProductServiceImpl implements ProductService{
     @Override
     public List<FakeStoreResponseDTO> getAllProducts() {
         List<FakeStoreResponseDTO> fakeStoreProduct = fakeStoreClient.getAllProducts();
+        if(fakeStoreProduct ==null){
+            throw new NoProductFoundException("there is no products available");
+        }
         return fakeStoreProduct;
     }
 
     @Override
-    public Product getProduct(int productId) {
-        return null;
+    public FakeStoreResponseDTO getProduct(int productId) throws ProductNotFoundException{
+        FakeStoreResponseDTO fakeStoreResponseDTO = fakeStoreClient.getProductById(productId);
+        if(fakeStoreResponseDTO == null){
+            throw new ProductNotFoundException("The Product you requested does not exist, the product id : "+ productId + " is not found");
+        }
+        return fakeStoreResponseDTO;
     }
+
+
 
     @Override
     public Product createProduct(Product product) {
