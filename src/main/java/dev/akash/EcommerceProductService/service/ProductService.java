@@ -5,11 +5,15 @@ import dev.akash.EcommerceProductService.entity.Product;
 import dev.akash.EcommerceProductService.exception.ProductNotFoundException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductService {
-    List<FakeStoreResponseDTO> getAllProducts();
-    FakeStoreResponseDTO getProduct(int productId) throws ProductNotFoundException;
+    List<Product> getAllProducts();
+    Product getProduct(UUID productId) throws ProductNotFoundException;
     Product createProduct(Product product);
-    Product updateProduct(Product product, int productId);
-    boolean deleteProduct(int productId);
+    Product updateProduct(Product product, UUID productId);
+    boolean deleteProduct(UUID productId);
+    Product findProductByTitle(String title);
+
+    List<Product> findProductByPriceRange(double min, double max);
 }
